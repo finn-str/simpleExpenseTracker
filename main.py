@@ -70,7 +70,7 @@ def neuesEinkommen(betrag, quelle):
 
 
 while True:
-    print("\nWählen sie von 1 bis 10:\n")
+    print("\nWählen sie von 1 bis 3:\n")
     print("1: Neue Ausgabe")
     print("2: Neues Einkommen")
     print("3: Kontostand Einsehen")
