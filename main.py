@@ -2,91 +2,90 @@ import datetime
 import os
 import csv
 
-# Variablen definieren
+# Define variables
 now = datetime.datetime.now()
-# Datum und Uhrzeit im folgenden Format "2023-09-26 15:47"
-formated = now.strftime("%Y-%m-%d")
-pfad = r'D:/Dokumente/GitHub/simpleExpenseTracker/'
-filename = "ausgaben.csv"
-csvdelimiter = ";"
+# Date and time in the following format "2023-09-26 15:47"
+formatted = now.strftime("%Y-%m-%d")
+path = r'D:/Documents/GitHub/simpleExpenseTracker/'
+filename = "expenses.csv"
+csv_delimiter = ";"
 
-if os.path.exists(pfad + filename):
-    with open(pfad + filename, 'r') as file:
+if os.path.exists(path + filename):
+    with open(path + filename, 'r') as file:
         lines = file.readlines()
-        konto = int(''.join([char for char in lines[0] if char.isdigit()])) # extract number out of String
-    print(konto)
+        account = int(''.join([char for char in lines[0] if char.isdigit()])) # extract number out of string
+    print(account)
 else:
-    konto = int(input("Was ist ihr aktueller Kontostand: "))
+    account = int(input("What is your current account balance: "))
     data = [
-        ["Kontostand:", konto],
+        ["Account Balance:", account],
         ["Type", "Amount", "Reason", "Date"],
         ]
-    with open(pfad + filename, 'w', newline='') as file:
-        writer = csv.writer(file, delimiter=csvdelimiter)
+    with open(path + filename, 'w', newline='') as file:
+        writer = csv.writer(file, delimiter=csv_delimiter)
         writer.writerows(data)
     print("CSV file has been created!")
 
 
-def writebalance(newbalance):
-    with open(pfad + filename, 'r') as file:
+def write_balance(new_balance):
+    with open(path + filename, 'r') as file:
         lines = file.readlines()
-    lines[0] = f"Kontostand:;{newbalance}\n"
-    with open(pfad + filename, 'w', newline='') as file:
-        writer = csv.writer(file, delimiter=csvdelimiter)
-        # Hier konvertieren wir jede Zeile in eine Liste von Zeichenketten,
-        # indem wir sie bei den Semikolons teilen, bevor wir sie schreiben.
+    lines[0] = f"Account Balance:;{new_balance}\n"
+    with open(path + filename, 'w', newline='') as file:
+        writer = csv.writer(file, delimiter=csv_delimiter)
+        # Here, we convert each line into a list of strings by splitting them at semicolons before writing them.
         writer.writerows([line.strip().split(';') for line in lines])
 
 
-def currentBalance():
-    message = "Ihr Kontostand liegt nun bei: " + str(konto) + "€." + " | " + formated
+def current_balance():
+    message = "Your account balance is now: " + str(account) + "€." + " | " + formatted
     print(message)
 
 
-def newExpense(betrag, zweck):
-    global formated
-    global konto
-    konto = konto - betrag
-    writebalance(konto)
-    new_data = ["Expense", betrag, zweck, formated]
-    with open(pfad + filename, 'a', newline='') as file:
-        writer = csv.writer(file, delimiter=csvdelimiter)
+def new_expense(amount, purpose):
+    global formatted
+    global account
+    account = account - amount
+    write_balance(account)
+    new_data = ["Expense", amount, purpose, formatted]
+    with open(path + filename, 'a', newline='') as file:
+        writer = csv.writer(file, delimiter=csv_delimiter)
         writer.writerow(new_data)
-    message = "Sie haben " + str(betrag) + '€ für "' + zweck + '" ausgegeben.' + " | " + formated
+    message = "You spent " + str(amount) + '€ on "' + purpose + '".' + " | " + formatted
     print(message)
 
 
-def newIncome(betrag, quelle):
-    global formated
-    global konto
-    konto = konto + betrag
-    writebalance(konto)
-    new_data = ["Income", str(betrag), quelle, formated]
-    with open(pfad + filename, 'a', newline='') as file:
-        writer = csv.writer(file, delimiter=csvdelimiter)  # Hier wird der Delimiter gesetzt
+def new_income(amount, source):
+    global formatted
+    global account
+    account = account + amount
+    write_balance(account)
+    new_data = ["Income", str(amount), source, formatted]
+    with open(path + filename, 'a', newline='') as file:
+        writer = csv.writer(file, delimiter=csv_delimiter)  # Here, the delimiter is set
         writer.writerow(new_data)
-    message = "Sie haben " + str(betrag) + '€ durch "' + quelle + '" erhalten.' + " | " + formated
+    message = "You received " + str(amount) + '€ from "' + source + '".' + " | " + formatted
     print(message)
 
 
 while True:
-    print("\nWählen sie von 1 bis 3:\n")
-    print("1: Neue Ausgabe")
-    print("2: Neues Einkommen")
-    print("3: Kontostand Einsehen")
-    useraction = int(input("\nWelche Aktion wollen Sie durchführen: "))
-    if (useraction == 1):
+    print("\nSelect from 1 to 3:\n")
+    print("1: New Expense")
+    print("2: New Income")
+    print("3: Check Account Balance")
+    user_action = int(input("\nWhich action do you want to perform: "))
+    if user_action == 1:
         print()
-        amount = int(input("Betrag: "))
-        purpose = input("Zweck: ")
-        newExpense(amount, purpose)
-    elif (useraction == 2):
+        amount = int(input("Amount: "))
+        purpose = input("Purpose: ")
+        new_expense(amount, purpose)
+    elif user_action == 2:
         print()
-        amount = int(input("Betrag: "))
-        source = input("Quelle: ")
-        newIncome(amount, source)
-    elif (useraction == 3):
+        amount = int(input("Amount: "))
+        source = input("Source: ")
+        new_income(amount, source)
+    elif user_action == 3:
         print()
-        currentBalance()
+        current_balance()
     else:
-        print("\nBitte geben sie eine gültige Eingabe an.")
+        print("\nPlease enter a valid input.")
